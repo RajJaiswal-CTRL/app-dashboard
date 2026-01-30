@@ -128,6 +128,11 @@
             color: white;
         }
 
+        .btn-info {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: white;
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -206,6 +211,7 @@
             border-radius: 15px;
             border: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
+            margin-bottom: 30px;
         }
 
         .search-box {
@@ -289,6 +295,18 @@
             background: rgba(245,158,11,0.2);
             color: #fcd34d;
             border: 1px solid rgba(245,158,11,0.4);
+        }
+
+        .badge-progress {
+            background: rgba(59,130,246,0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59,130,246,0.4);
+        }
+
+        .badge-hold {
+            background: rgba(239,68,68,0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239,68,68,0.4);
         }
 
         .badge-ats {
@@ -377,7 +395,7 @@
             background: linear-gradient(135deg, #1a1f3a 0%, #2a1f3d 100%);
             padding: 40px;
             border-radius: 20px;
-            max-width: 600px;
+            max-width: 700px;
             width: 90%;
             border: 1px solid rgba(255,255,255,0.2);
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
@@ -441,6 +459,128 @@
 
         .notification.info {
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        /* Activity Tracker Styles */
+        .activity-section {
+            background: rgba(26,31,58,0.6);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .activity-item {
+            background: rgba(139,92,246,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border-left: 3px solid #8b5cf6;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            background: rgba(139,92,246,0.15);
+            transform: translateX(5px);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .activity-account {
+            font-weight: 600;
+            color: #a78bfa;
+            font-size: 1.05em;
+        }
+
+        .activity-time {
+            color: #9ca3af;
+            font-size: 0.85em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .activity-action {
+            color: #d1d5db;
+            font-size: 0.95em;
+        }
+
+        .activity-comment {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: #d1d5db;
+            font-style: italic;
+        }
+
+        .comment-count {
+            background: rgba(139,92,246,0.3);
+            color: #a78bfa;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .notes-section {
+            background: rgba(6,182,212,0.1);
+            border: 1px solid rgba(6,182,212,0.3);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .note-item {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 2px solid #06b6d4;
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .note-author {
+            color: #67e8f9;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .note-timestamp {
+            color: #9ca3af;
+            font-size: 0.8em;
+        }
+
+        .note-text {
+            color: #d1d5db;
+            font-size: 0.9em;
+        }
+
+        .auto-tat {
+            color: #10b981;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tat-auto-badge {
+            background: rgba(16,185,129,0.2);
+            color: #6ee7b7;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            margin-left: 5px;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         @media (max-width: 768px) {
@@ -522,7 +662,7 @@
     <div class="container">
         <header>
             <h1>🚀 Migration Dashboard</h1>
-            <p class="subtitle">Live Analytics & Data Management</p>
+            <p class="subtitle">Live Analytics & Data Management with Activity Tracking</p>
         </header>
 
         <div class="toolbar">
@@ -535,6 +675,9 @@
             <button class="btn btn-secondary" onclick="importCSV()">
                 <span>📤</span> Import CSV
             </button>
+            <button class="btn btn-info" onclick="showActivityLog()">
+                <span>📊</span> Activity Log
+            </button>
             <div class="file-input-wrapper">
                 <input type="file" id="csvFileInput" accept=".csv" onchange="handleFileImport(event)">
             </div>
@@ -544,6 +687,12 @@
         </div>
 
         <div class="stats-grid" id="statsGrid"></div>
+
+        <!-- Activity Tracker Section -->
+        <div class="activity-section" id="activitySection" style="display: none;">
+            <h3 class="chart-title">📋 Recent Activity & Comments</h3>
+            <div id="activityLog"></div>
+        </div>
 
         <div class="charts-grid" id="chartsGrid">
             <div class="chart-card">
@@ -573,549 +722,3 @@
                         <tr>
                             <th>Account</th>
                             <th>Status</th>
-                            <th>Type</th>
-                            <th>Source ATS</th>
-                            <th>Data Shared</th>
-                            <th>Completed</th>
-                            <th>TAT (Days)</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
-                <div id="emptyState" class="empty-state" style="display: none;">
-                    <div class="empty-state-icon">📊</div>
-                    <div class="empty-state-title">No Migration Records Yet</div>
-                    <div class="empty-state-text">Click "Add New Record" to start building your dashboard</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add/Edit Modal -->
-    <div id="recordModal" class="modal">
-        <div class="modal-content">
-            <h2 class="modal-header" id="modalTitle">Add New Record</h2>
-            <form id="recordForm">
-                <div class="form-group">
-                    <label>Account Name *</label>
-                    <input type="text" id="accountInput" required>
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="statusInput">
-                        <option value="Completed from Migration Team">Completed from Migration Team</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Pending">Pending</option>
-                        <option value="On Hold">On Hold</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Migration Type</label>
-                    <select id="migrationTypeInput">
-                        <option value="">Select Type</option>
-                        <option value="ATS">ATS</option>
-                        <option value="Bulk Parsing">Bulk Parsing</option>
-                        <option value="Internal">Internal</option>
-                        <option value="WF">WF</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Source ATS</label>
-                    <input type="text" id="sourceATSInput" placeholder="e.g., Jobdiva, Bullhorn, Ceipal">
-                </div>
-                <div class="form-group">
-                    <label>Data Shared Date</label>
-                    <input type="date" id="dataSharedInput">
-                </div>
-                <div class="form-group">
-                    <label>Migration Completed Date</label>
-                    <input type="date" id="completedDateInput">
-                </div>
-                <div class="form-group">
-                    <label>TAT (Days)</label>
-                    <input type="number" id="tatDaysInput" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Comment</label>
-                    <textarea id="commentInput" placeholder="Add any notes or comments..."></textarea>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex: 1;">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Notification -->
-    <div id="notification" class="notification"></div>
-
-    <script>
-        let migrationData = [];
-        let charts = {};
-        let editingIndex = null;
-
-        // Load data from localStorage on startup
-        function loadData() {
-            const savedData = localStorage.getItem('migrationData');
-            if (savedData) {
-                migrationData = JSON.parse(savedData);
-                showNotification('Loaded ' + migrationData.length + ' records from storage', 'info');
-            } else {
-                migrationData = [];
-                showNotification('Dashboard ready! Add your first record to get started', 'info');
-            }
-            refreshDashboard();
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('migrationData', JSON.stringify(migrationData));
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return '-';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
-
-        function calculateStats(data) {
-            const stats = {
-                total: data.length,
-                completed: 0,
-                pending: 0,
-                migrationTypes: {},
-                sourceATS: {},
-                tatValues: []
-            };
-
-            data.forEach(record => {
-                if (record.Migration_Completed_Date) {
-                    stats.completed++;
-                } else {
-                    stats.pending++;
-                }
-
-                if (record.Migration_Type) {
-                    stats.migrationTypes[record.Migration_Type] = (stats.migrationTypes[record.Migration_Type] || 0) + 1;
-                }
-
-                if (record.Source_ATS) {
-                    stats.sourceATS[record.Source_ATS] = (stats.sourceATS[record.Source_ATS] || 0) + 1;
-                }
-
-                if (record.TAT_Days && !isNaN(record.TAT_Days)) {
-                    stats.tatValues.push(parseInt(record.TAT_Days));
-                }
-            });
-
-            stats.avgTAT = stats.tatValues.length > 0 
-                ? (stats.tatValues.reduce((a, b) => a + b, 0) / stats.tatValues.length).toFixed(1)
-                : 0;
-
-            return stats;
-        }
-
-        function renderStats(stats) {
-            const statsGrid = document.getElementById('statsGrid');
-            statsGrid.innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-number">${stats.total}</div>
-                    <div class="stat-label">Total Migrations</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${stats.completed}</div>
-                    <div class="stat-label">Completed</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${stats.pending}</div>
-                    <div class="stat-label">Pending</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${stats.avgTAT}</div>
-                    <div class="stat-label">Avg TAT (Days)</div>
-                </div>
-            `;
-        }
-
-        function getMigrationTypeBadge(type) {
-            const badges = {
-                'ATS': 'badge-ats',
-                'Bulk Parsing': 'badge-bulk',
-                'Internal': 'badge-internal',
-                'WF': 'badge-wf'
-            };
-            return badges[type] || 'badge-ats';
-        }
-
-        function getStatusBadge(record) {
-            if (record.Migration_Completed_Date) {
-                return 'badge-completed';
-            }
-            return 'badge-pending';
-        }
-
-        function renderTable(data) {
-            const tableBody = document.getElementById('tableBody');
-            const emptyState = document.getElementById('emptyState');
-            
-            if (data.length === 0) {
-                tableBody.innerHTML = '';
-                emptyState.style.display = 'block';
-                return;
-            }
-            
-            emptyState.style.display = 'none';
-            tableBody.innerHTML = data.map((record, index) => `
-                <tr data-index="${index}">
-                    <td><strong>${record.Account}</strong></td>
-                    <td><span class="badge ${getStatusBadge(record)}">${record.Status}</span></td>
-                    <td><span class="badge ${getMigrationTypeBadge(record.Migration_Type)}">${record.Migration_Type || '-'}</span></td>
-                    <td>${record.Source_ATS || '-'}</td>
-                    <td>${formatDate(record.Data_Shared_Date)}</td>
-                    <td>${formatDate(record.Migration_Completed_Date)}</td>
-                    <td>${record.TAT_Days || '-'}</td>
-                    <td class="action-buttons">
-                        <button class="icon-btn" onclick="editRecord(${index})" title="Edit">✏️</button>
-                        <button class="icon-btn" onclick="deleteRecord(${index})" title="Delete">🗑️</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function setupSearch() {
-            const searchBox = document.getElementById('searchBox');
-            searchBox.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const filtered = migrationData.filter(record => 
-                    record.Account.toLowerCase().includes(searchTerm) ||
-                    (record.Migration_Type && record.Migration_Type.toLowerCase().includes(searchTerm)) ||
-                    (record.Source_ATS && record.Source_ATS.toLowerCase().includes(searchTerm))
-                );
-                renderTable(filtered);
-            });
-        }
-
-        function updateCharts(stats) {
-            // Destroy existing charts
-            Object.values(charts).forEach(chart => chart.destroy());
-            charts = {};
-
-            // Don't render charts if no data
-            if (stats.total === 0) {
-                document.getElementById('chartsGrid').style.display = 'none';
-                return;
-            }
-            document.getElementById('chartsGrid').style.display = 'grid';
-
-            // Migration Types Chart
-            if (Object.keys(stats.migrationTypes).length > 0) {
-                charts.migrationTypeChart = new Chart(document.getElementById('migrationTypeChart'), {
-                    type: 'doughnut',
-                    data: {
-                        labels: Object.keys(stats.migrationTypes),
-                        datasets: [{
-                            data: Object.values(stats.migrationTypes),
-                            backgroundColor: ['#8b5cf6', '#6366f1', '#ec4899', '#14b8a6'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { color: '#e4e4e7', font: { size: 12 } }
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Source ATS Chart
-            if (Object.keys(stats.sourceATS).length > 0) {
-                charts.sourceATSChart = new Chart(document.getElementById('sourceATSChart'), {
-                    type: 'bar',
-                    data: {
-                        labels: Object.keys(stats.sourceATS),
-                        datasets: [{
-                            label: 'Count',
-                            data: Object.values(stats.sourceATS),
-                            backgroundColor: '#8b5cf6',
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: { stepSize: 1, color: '#9ca3af' },
-                                grid: { color: 'rgba(255,255,255,0.05)' }
-                            },
-                            x: {
-                                ticks: { color: '#9ca3af' },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Status Chart
-            charts.statusChart = new Chart(document.getElementById('statusChart'), {
-                type: 'pie',
-                data: {
-                    labels: ['Completed', 'Pending'],
-                    datasets: [{
-                        data: [stats.completed, stats.pending],
-                        backgroundColor: ['#10b981', '#f59e0b'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#e4e4e7', font: { size: 12 } }
-                        }
-                    }
-                }
-            });
-
-            // TAT Distribution Chart
-            if (stats.tatValues.length > 0) {
-                const tatRanges = {
-                    '0-10 days': 0,
-                    '11-20 days': 0,
-                    '21-30 days': 0,
-                    '31+ days': 0
-                };
-
-                stats.tatValues.forEach(tat => {
-                    if (tat <= 10) tatRanges['0-10 days']++;
-                    else if (tat <= 20) tatRanges['11-20 days']++;
-                    else if (tat <= 30) tatRanges['21-30 days']++;
-                    else tatRanges['31+ days']++;
-                });
-
-                charts.tatChart = new Chart(document.getElementById('tatChart'), {
-                    type: 'bar',
-                    data: {
-                        labels: Object.keys(tatRanges),
-                        datasets: [{
-                            label: 'Migrations',
-                            data: Object.values(tatRanges),
-                            backgroundColor: '#6366f1',
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: { stepSize: 1, color: '#9ca3af' },
-                                grid: { color: 'rgba(255,255,255,0.05)' }
-                            },
-                            x: {
-                                ticks: { color: '#9ca3af' },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
-        function refreshDashboard() {
-            const stats = calculateStats(migrationData);
-            renderStats(stats);
-            renderTable(migrationData);
-            updateCharts(stats);
-            setupSearch();
-        }
-
-        function addNewRecord() {
-            editingIndex = null;
-            document.getElementById('modalTitle').textContent = 'Add New Record';
-            document.getElementById('recordForm').reset();
-            document.getElementById('recordModal').classList.add('active');
-        }
-
-        function editRecord(index) {
-            editingIndex = index;
-            const record = migrationData[index];
-            
-            document.getElementById('modalTitle').textContent = 'Edit Record';
-            document.getElementById('accountInput').value = record.Account;
-            document.getElementById('statusInput').value = record.Status;
-            document.getElementById('migrationTypeInput').value = record.Migration_Type || '';
-            document.getElementById('sourceATSInput').value = record.Source_ATS || '';
-            document.getElementById('dataSharedInput').value = record.Data_Shared_Date || '';
-            document.getElementById('completedDateInput').value = record.Migration_Completed_Date || '';
-            document.getElementById('tatDaysInput').value = record.TAT_Days || '';
-            document.getElementById('commentInput').value = record.Comment || '';
-            
-            document.getElementById('recordModal').classList.add('active');
-        }
-
-        function deleteRecord(index) {
-            if (confirm('Are you sure you want to delete this record?')) {
-                migrationData.splice(index, 1);
-                saveToLocalStorage();
-                refreshDashboard();
-                showNotification('Record deleted successfully!', 'success');
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('recordModal').classList.remove('active');
-        }
-
-        document.getElementById('recordForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const newRecord = {
-                Account: document.getElementById('accountInput').value,
-                Status: document.getElementById('statusInput').value,
-                Migration_Type: document.getElementById('migrationTypeInput').value,
-                Source_ATS: document.getElementById('sourceATSInput').value,
-                Data_Shared_Date: document.getElementById('dataSharedInput').value,
-                Migration_Completed_Date: document.getElementById('completedDateInput').value,
-                TAT_Days: document.getElementById('tatDaysInput').value,
-                Comment: document.getElementById('commentInput').value
-            };
-            
-            if (editingIndex !== null) {
-                migrationData[editingIndex] = newRecord;
-                showNotification('Record updated successfully!', 'success');
-            } else {
-                migrationData.push(newRecord);
-                showNotification('Record added successfully!', 'success');
-            }
-            
-            saveToLocalStorage();
-            refreshDashboard();
-            closeModal();
-        });
-
-        function exportToCSV() {
-            if (migrationData.length === 0) {
-                showNotification('No data to export!', 'error');
-                return;
-            }
-
-            const headers = ['Account', 'Status', 'Migration_Type', 'Source_ATS', 'Data_Shared_Date', 
-                            'Migration_Completed_Date', 'TAT_Days', 'Comment'];
-            
-            let csv = headers.join(',') + '\n';
-            
-            migrationData.forEach(record => {
-                const row = headers.map(header => {
-                    const value = record[header] || '';
-                    return `"${value.toString().replace(/"/g, '""')}"`;
-                });
-                csv += row.join(',') + '\n';
-            });
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'migration_data_' + new Date().toISOString().split('T')[0] + '.csv';
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-            showNotification('CSV exported successfully!', 'success');
-        }
-
-        function importCSV() {
-            document.getElementById('csvFileInput').click();
-        }
-
-        function handleFileImport(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const csvText = e.target.result;
-                    const importedData = parseCSV(csvText);
-                    
-                    if (confirm(`Import ${importedData.length} records? This will replace your current data.`)) {
-                        migrationData = importedData;
-                        saveToLocalStorage();
-                        refreshDashboard();
-                        showNotification('CSV imported successfully!', 'success');
-                    }
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        function parseCSV(csv) {
-            const lines = csv.trim().split('\n');
-            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-            const data = [];
-            
-            for (let i = 1; i < lines.length; i++) {
-                if (lines[i].trim()) {
-                    const values = [];
-                    let current = '';
-                    let inQuotes = false;
-                    
-                    for (let char of lines[i]) {
-                        if (char === '"') {
-                            inQuotes = !inQuotes;
-                        } else if (char === ',' && !inQuotes) {
-                            values.push(current.trim().replace(/^"|"$/g, ''));
-                            current = '';
-                        } else {
-                            current += char;
-                        }
-                    }
-                    values.push(current.trim().replace(/^"|"$/g, ''));
-                    
-                    const record = {};
-                    headers.forEach((header, index) => {
-                        record[header] = values[index] || '';
-                    });
-                    data.push(record);
-                }
-            }
-            
-            return data;
-        }
-
-        function clearAllData() {
-            if (confirm('Are you sure you want to delete ALL records? This cannot be undone!')) {
-                migrationData = [];
-                localStorage.removeItem('migrationData');
-                refreshDashboard();
-                showNotification('All data cleared!', 'success');
-            }
-        }
-
-        function showNotification(message, type) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // Initialize
-        loadData();
-    </script>
-</body>
-</html>
